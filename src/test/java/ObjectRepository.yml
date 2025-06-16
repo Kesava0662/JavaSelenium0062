@@ -1,0 +1,32 @@
+Home Page:
+   loginPagepagetitle: "login"
+New Feature:
+   Hockey_CBCheckBoxXPATH: "//input[@id='checkbox3']"
+Alerts:
+   Confirmpassword_tbTextBoxXPATH: "//input[@id='secondpassword']"
+   firstname_taTextAreaXPATH: "//input[@placeholder='First Name']"
+   tbtestTextBoxXPATH: ""
+   firstname_tbTextBoxXPATH: "//input[@placeholder='First Name']"
+   languagebuttonButtonXPATH: "//div[@id='msdd']"
+   lastname_RBRadioButtonXPATH: "//input[@placeholder='Last Name']"
+   refreshlinkLinkXPATH: "//button[@id='Button1']"
+   AddressimgImageXPATH: "//textarea[@class='form-control ng-pristine ng-untouched ng-valid']"
+   countrieslabelLabelXPATH: "//select[@id='countries']"
+   Opnnwtabandnav_tbTextBoxXPATH: ""
+   Opnnwtabandnav_pgPageXPATH: ""
+   Opnnwtabandnav_ntNewTabXPATH: ""
+   browser_tbTextBoxXPATH: ""
+   browser_pgPageXPATH: ""
+Page 2:
+   uielement_scrollScrollXPATH: ""
+   uielement_tbTextBoxXPATH: ""
+Page 3:
+   Intinitescroll_tbTextBoxXPATH: "//h3[contains(.,'Infinite Scroll')]"
+   InfinitescrollbuttonButtonXPATH: "//h3[contains(.,'Infinite Scroll')]"
+page 4:
+   InfinitescrolllinkLinkXPATH: "//h3[contains(.,'Infinite Scroll')]"
+   InfinitescrolllabelLabelXPATH: "//h3[contains(.,'Infinite Scroll')]"
+Form Authentication:
+   closepagePageXPATH: ""
+   DefaultpagepageTitle: ""
+   messageLabeltext: ""

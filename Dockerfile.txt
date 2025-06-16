@@ -1,0 +1,44 @@
+
+# Use Amazon Corretto 11 as base image
+FROM amazoncorretto:11
+
+# Install dependencies and Chrome
+RUN yum -y update && \
+    yum -y install -y wget unzip curl xorg-x11-server-Xvfb libXrandr libXcursor libXinerama libXi libXcomposite alsa-lib atk cups-libs gtk3 libXScrnSaver && \
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    yum -y install ./google-chrome-stable_current_x86_64.rpm && \
+    rm -f google-chrome-stable_current_x86_64.rpm
+
+# Install ChromeDriver (match version with installed Chrome)
+RUN CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9.]+' | head -1 | cut -d. -f1-3) && \
+    echo "Detected Chrome version: $CHROME_VERSION" && \
+    LATEST_DRIVER=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") && \
+    wget -O chromedriver.zip "https://chromedriver.storage.googleapis.com/${LATEST_DRIVER}/chromedriver_linux64.zip" && \
+    unzip chromedriver.zip && \
+    mv chromedriver /usr/local/bin/ && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm chromedriver.zip
+
+# Install Maven
+RUN wget https://downloads.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.zip && \
+    unzip apache-maven-3.9.6-bin.zip -d /opt && \
+    ln -s /opt/apache-maven-3.9.6 /opt/maven && \
+    rm apache-maven-3.9.6-bin.zip
+
+# Set environment variables
+ENV MAVEN_HOME=/opt/maven
+ENV PATH=${MAVEN_HOME}/bin:${PATH}
+ENV CHROME_BIN=/usr/bin/google-chrome
+ENV DISPLAY=:99
+
+# Set working directory
+WORKDIR /app
+
+# Copy source code
+COPY . /app
+
+# Resolve dependencies and compile
+RUN mvn clean install -DskipTests
+
+# Default command - can be overridden in docker-compose or CLI
+CMD ["mvn", "test"]
