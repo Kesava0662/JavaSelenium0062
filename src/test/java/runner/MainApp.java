@@ -1,12 +1,31 @@
-package runner;
+import com.amazonaws.auth.*;
+import com.amazonaws.services.s3.*;
+import com.amazonaws.services.s3.model.*;
+import java.io.*;
 
-import org.junit.internal.TextListener;
-import org.junit.runner.JUnitCore;
+public class S3Uploader {
+    public static void uploadReportsToS3() {
+        try {
+            AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new InstanceProfileCredentialsProvider(false))
+                .withRegion("ap-south-1")
+                .build();
 
-public class MainApp {
-	public static void main(String[] args) {
-		JUnitCore junit = new JUnitCore();
-		junit.addListener(new TextListener(System.out));
-		junit.run(TestRunner.class);
-	}
+            File outputDir = new File("output");
+            uploadDirectory(s3Client, "selenium-test-logs-kesava", outputDir, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void uploadDirectory(AmazonS3 s3Client, String bucketName, File dir, String prefix) {
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                uploadDirectory(s3Client, bucketName, file, prefix + file.getName() + "/");
+            } else {
+                s3Client.putObject(bucketName, prefix + file.getName(), file);
+                System.out.println("Uploaded " + prefix + file.getName());
+            }
+        }
+    }
 }
